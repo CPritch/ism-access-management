@@ -1,0 +1,33 @@
+﻿@page "/"
+@using AccessManager.Data
+@inject IDoorRepository doorRepository
+
+<PageTitle>Door Management</PageTitle>
+
+<MudText Typo="Typo.h3" Class="pb-4">Door Management</MudText>
+<MudGrid>
+    @foreach (var door in doorRepository.GetAllDoors())
+    {
+        <MudItem xs="12" sm="6" md="4">  
+            <MudCard Elevation="2">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">@door.Name</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText>Status:</MudText>
+                    <MudChip T="string" Color="@(door.IsOpen ? Color.Success : Color.Error)">
+                        @(door.IsOpen ? "Open" : "Closed")
+                    </MudChip>
+                    <MudChip T="string" Color="@(door.IsLocked ? Color.Warning : Color.Success)">
+                        @(door.IsLocked ? "Locked" : "Unlocked")
+                    </MudChip>
+                    <MudChip T="string" Color="@(door.IsArmed ? Color.Warning : Color.Success)">
+                        @(door.IsLocked ? "Armed" : "Disarmed")
+                    </MudChip>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    }
+</MudGrid>
