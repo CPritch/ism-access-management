@@ -1,4 +1,5 @@
 using AccessManager.Components;
+using MudBlazor.Services;
 
 namespace AccessManager
 {
@@ -10,6 +11,7 @@ namespace AccessManager
 
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+            builder.Services.AddMudServices();
 
             var app = builder.Build();
 
