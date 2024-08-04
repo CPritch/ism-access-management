@@ -7,7 +7,7 @@
             new Door(id: 1, name: "Front Entrance"),
             new Door(id: 2, name: "Side Entrance" ),
             new Door(id: 3, name: "Rear Entrance" ),
-            new Door(id: 4, name: "Secure Locker" ),
+            new Door(id: 4, name: "Secure Locker", isLocked: true, isAlarmed: true),
         };
 
         public List<Door> GetAllDoors() { return _doors; }

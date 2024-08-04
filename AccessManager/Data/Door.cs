@@ -13,13 +13,20 @@ namespace AccessManager.Data
         public bool IsLocked { get; private set; }
         public bool IsAlarmed { get; private set; }
 
-        public Door(int id, string name)
+        public Door(int id, string name, bool isOpen = false, bool isLocked = false, bool isAlarmed = false)
         {
             Id = id;
             Name = name;
-            IsOpen = false;
-            IsLocked = false;
-            IsAlarmed = false;
+            IsOpen = isOpen;
+            IsLocked = isLocked;
+            IsAlarmed = isAlarmed;
+        }
+
+        public void UpdateState(bool isOpen, bool isLocked, bool isAlarmed)
+        {
+            IsOpen = isOpen;
+            IsLocked = isLocked;
+            IsAlarmed = isAlarmed;
         }
     }
 }
