@@ -1,5 +1,4 @@
 ﻿using AccessManager.Data;
-using Xunit;
 
 namespace AccessManager.Tests.Data
 {
@@ -8,13 +7,24 @@ namespace AccessManager.Tests.Data
         [Fact]
         public void Constructor_InitializesPropertiesCorrectly()
         {
-            var door = new Door(1, "Test Door");
+            var door = new Door(id: 1, name: "Test Door");
 
             Assert.Equal(1, door.Id);
             Assert.Equal("Test Door", door.Name);
             Assert.False(door.IsOpen);
             Assert.False(door.IsLocked);
-            Assert.False(door.IsAlarmed);
+            Assert.False(door.IsArmed);
+        }
+
+        [Fact]
+        public void UpdateState_UpdatesPropertiesCorrectly()
+        {
+            var door = new Door(id: 1, name: "Test Door");
+            door.UpdateState(isOpen: true, isLocked: true, isArmed: true);
+
+            Assert.True(door.IsOpen);
+            Assert.True(door.IsLocked);
+            Assert.True(door.IsArmed);
         }
     }
 }

@@ -11,22 +11,22 @@ namespace AccessManager.Data
         public string Name { get; private set; }
         public bool IsOpen { get; private set; }
         public bool IsLocked { get; private set; }
-        public bool IsAlarmed { get; private set; }
+        public bool IsArmed { get; private set; }
 
-        public Door(int id, string name, bool isOpen = false, bool isLocked = false, bool isAlarmed = false)
+        public Door(int id, string name, bool isOpen = false, bool isLocked = false, bool isArmed = false)
         {
             Id = id;
             Name = name;
             IsOpen = isOpen;
             IsLocked = isLocked;
-            IsAlarmed = isAlarmed;
+            IsArmed = isArmed;
         }
 
-        public void UpdateState(bool isOpen, bool isLocked, bool isAlarmed)
+        public void UpdateState(bool isOpen, bool isLocked, bool isArmed)
         {
             IsOpen = isOpen;
             IsLocked = isLocked;
-            IsAlarmed = isAlarmed;
+            IsArmed = isArmed;
         }
     }
 }

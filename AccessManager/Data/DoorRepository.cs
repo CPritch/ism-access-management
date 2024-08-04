@@ -7,7 +7,7 @@
             new Door(id: 1, name: "Front Entrance"),
             new Door(id: 2, name: "Side Entrance" ),
             new Door(id: 3, name: "Rear Entrance" ),
-            new Door(id: 4, name: "Secure Locker", isLocked: true, isAlarmed: true),
+            new Door(id: 4, name: "Secure Locker", isLocked: true, isArmed: true),
         };
 
         public List<Door> GetAllDoors() => _doors;
@@ -22,7 +22,7 @@
             return door;
         }
 
-        public void UpdateDoor(Door updatedDoor)
+        public void UpdateDoor(Door updatedDoor) // Yes this is redundant but would be where I'd perform a DB transaction.
         {
             int index = _doors.FindIndex(d => d.Id == updatedDoor.Id);
             if (index != -1)
