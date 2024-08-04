@@ -8,7 +8,7 @@
 <MudGrid>
     @foreach (var door in doorRepository.GetAllDoors())
     {
-        <MudItem xs="12" sm="6" md="4">  
+        <MudItem xs="12" sm="6" md="4">
             <MudCard Elevation="2">
                 <MudCardHeader>
                     <CardHeaderContent>
@@ -17,17 +17,31 @@
                 </MudCardHeader>
                 <MudCardContent>
                     <MudText>Status:</MudText>
-                    <MudChip T="string" Color="@(door.IsOpen ? Color.Success : Color.Error)">
-                        @(door.IsOpen ? "Open" : "Closed")
+                    <MudChip T="string" Color="@GetOpenColor(door.IsOpen)" Icon="@GetOpenIcon(door.IsOpen)">
+                        @GetOpenText(door.IsOpen)
                     </MudChip>
-                    <MudChip T="string" Color="@(door.IsLocked ? Color.Warning : Color.Success)">
-                        @(door.IsLocked ? "Locked" : "Unlocked")
+                    <MudChip T="string" Color="@GetLockedColor(door.IsLocked)" Icon="@GetLockedIcon(door.IsLocked)">
+                        @GetLockedText(door.IsLocked)
                     </MudChip>
-                    <MudChip T="string" Color="@(door.IsArmed ? Color.Warning : Color.Success)">
-                        @(door.IsLocked ? "Armed" : "Disarmed")
+                    <MudChip T="string" Color="@GetArmedColor(door.IsArmed)" Icon="@GetArmedIcon(door.IsArmed)">
+                        @GetArmedText(door.IsArmed)
                     </MudChip>
                 </MudCardContent>
             </MudCard>
         </MudItem>
     }
 </MudGrid>
+
+@code {
+    private string GetOpenText(bool isOpen) => isOpen ? "Open" : "Closed";
+    private Color GetOpenColor(bool isOpen) => isOpen ? Color.Success : Color.Error;
+    private string GetOpenIcon(bool isOpen) => isOpen ? Icons.Material.Outlined.DoorFront : Icons.Material.Filled.DoorFront;
+
+    private string GetLockedText(bool isLocked) => isLocked ? "Locked" : "Unlocked";
+    private Color GetLockedColor(bool isLocked) => isLocked ? Color.Warning : Color.Success;
+    private string GetLockedIcon(bool isLocked) => isLocked ? Icons.Material.Filled.Lock : Icons.Material.Filled.LockOpen;
+
+    private string GetArmedText(bool isArmed) => isArmed ? "Armed" : "Disarmed";
+    private Color GetArmedColor(bool isArmed) => isArmed ? Color.Warning : Color.Success;
+    private string GetArmedIcon(bool isArmed) => isArmed ? Icons.Material.Filled.AlarmOn : Icons.Material.Filled.AlarmOff;
+}
