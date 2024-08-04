@@ -4,5 +4,6 @@
     {
         List<Door> GetAllDoors();
         Door GetDoorById(int id);
+        void UpdateDoor(Door door);
     }
 }

@@ -10,8 +10,25 @@
             new Door(id: 4, name: "Secure Locker", isLocked: true, isAlarmed: true),
         };
 
-        public List<Door> GetAllDoors() { return _doors; }
+        public List<Door> GetAllDoors() => _doors;
 
-        public Door GetDoorById(int id) { return _doors[id]; }
+        public Door GetDoorById(int id)
+        {
+            Door? door = _doors.FirstOrDefault(d => d.Id == id);
+            if (door == null)
+            {
+                throw new KeyNotFoundException($"Door with ID {id} not found.");
+            }
+            return door;
+        }
+
+        public void UpdateDoor(Door updatedDoor)
+        {
+            int index = _doors.FindIndex(d => d.Id == updatedDoor.Id);
+            if (index != -1)
+            {
+                _doors[index] = updatedDoor;
+            }
+        }
     }
 }
