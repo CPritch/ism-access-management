@@ -46,6 +46,13 @@ A web-based UI built using C# / ASP.NET Core and MudBlazor for managing access c
     ```bash
     dotnet test
     ```
+## Project Structure
+
+- `AccessManager`: Main Blazor Server project
+    - `Data`: Contains data access and domain models
+    - `Hubs`: Contains SignalR hubs
+    - `Components`: Contains Blazor components
+- `AccessManager.Tests`: xUnit test project
 
 ## License
 
