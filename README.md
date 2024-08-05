@@ -54,6 +54,8 @@ A web-based UI built using C# / ASP.NET Core and MudBlazor for managing access c
     - `Components`: Contains Blazor components
 - `AccessManager.Tests`: xUnit test project
 
+To get a better understanding of my design decisions I have made a document [here](./DESIGN.md)
+
 ## License
 
 This project is licensed under the [MIT License](/LICENSE).
