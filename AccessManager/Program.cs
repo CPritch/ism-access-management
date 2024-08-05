@@ -13,7 +13,7 @@ namespace AccessManager
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
             builder.Services.AddMudServices();
-            builder.Services.AddScoped<IDoorRepository, DoorRepository>();
+            builder.Services.AddSingleton<IDoorRepository, DoorRepository>();
 
             var app = builder.Build();
 
