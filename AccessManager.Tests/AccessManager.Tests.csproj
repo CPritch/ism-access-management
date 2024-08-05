@@ -7,6 +7,8 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <Version>0.1.0</Version>
+    <Authors>Charles Pritchard</Authors>
   </PropertyGroup>
 
   <ItemGroup>
