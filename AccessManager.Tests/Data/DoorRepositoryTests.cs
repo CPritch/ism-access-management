@@ -45,5 +45,16 @@ namespace AccessManager.Tests.Data
             Assert.False(retrievedDoor.IsLocked);
             Assert.True(retrievedDoor.IsAlarmed);
         }
+
+        [Fact]
+        public void UpdateDoor_DoesNothing_ForNonexistentDoor()
+        {
+            var nonExistentDoor = new Door(999, "Nonexistent Door");
+            nonExistentDoor.UpdateState(true, false, true);
+
+            _repository.UpdateDoor(nonExistentDoor);
+
+            Assert.DoesNotContain(nonExistentDoor, _repository.GetAllDoors());
+        }
     }
 }
