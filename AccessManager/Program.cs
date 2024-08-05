@@ -1,4 +1,6 @@
 using AccessManager.Components;
+using AccessManager.Data;
+using MudBlazor.Services;
 
 namespace AccessManager
 {
@@ -10,6 +12,8 @@ namespace AccessManager
 
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+            builder.Services.AddMudServices();
+            builder.Services.AddScoped<IDoorRepository, DoorRepository>();
 
             var app = builder.Build();
 

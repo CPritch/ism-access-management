@@ -1,18 +1,9 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Access Manager</a>
-    </div>
-</div>
-
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
+﻿<MudPaper Width="250px" Class="py-3" Elevation="0">
+    <MudDrawer Open="true" Elevation="1">
+        <MudNavMenu>
+            <MudText Typo="Typo.h6" Class="px-4" Align="Align.Center">Access Manager</MudText>
+            <MudDivider Class="my-2" />
+            <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+</MudPaper>

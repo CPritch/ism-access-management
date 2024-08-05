@@ -1,0 +1,47 @@
+﻿@page "/"
+@using AccessManager.Data
+@inject IDoorRepository doorRepository
+
+<PageTitle>Door Management</PageTitle>
+
+<MudText Typo="Typo.h3" Class="pb-4">Door Management</MudText>
+<MudGrid>
+    @foreach (var door in doorRepository.GetAllDoors())
+    {
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Elevation="2">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">@door.Name</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText>Status:</MudText>
+                    <MudChip T="string" Color="@GetOpenColor(door.IsOpen)" Icon="@GetOpenIcon(door.IsOpen)">
+                        @GetOpenText(door.IsOpen)
+                    </MudChip>
+                    <MudChip T="string" Color="@GetLockedColor(door.IsLocked)" Icon="@GetLockedIcon(door.IsLocked)">
+                        @GetLockedText(door.IsLocked)
+                    </MudChip>
+                    <MudChip T="string" Color="@GetAlarmedColor(door.IsAlarmed)" Icon="@GetAlarmedIcon(door.IsAlarmed)">
+                        @GetAlarmedText(door.IsAlarmed)
+                    </MudChip>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+    private string GetOpenText(bool isOpen) => isOpen ? "Open" : "Closed";
+    private Color GetOpenColor(bool isOpen) => isOpen ? Color.Success : Color.Warning;
+    private string GetOpenIcon(bool isOpen) => isOpen ? Icons.Material.Outlined.DoorFront : Icons.Material.Filled.DoorFront;
+
+    private string GetLockedText(bool isLocked) => isLocked ? "Locked" : "Unlocked";
+    private Color GetLockedColor(bool isLocked) => isLocked ? Color.Warning : Color.Success;
+    private string GetLockedIcon(bool isLocked) => isLocked ? Icons.Material.Filled.Lock : Icons.Material.Filled.LockOpen;
+
+    private string GetAlarmedText(bool isAlarmed) => isAlarmed ? "Alarmed" : "Inactive";
+    private Color GetAlarmedColor(bool isAlarmed) => isAlarmed ? Color.Error : Color.Success;
+    private string GetAlarmedIcon(bool isAlarmed) => isAlarmed ? Icons.Material.Filled.AlarmOn : Icons.Material.Filled.AlarmOff;
+}

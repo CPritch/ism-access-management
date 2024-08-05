@@ -36,14 +36,14 @@ namespace AccessManager.Tests.Data
         public void UpdateDoor_UpdatesDoorState()
         {
             var originalDoor = _repository.GetDoorById(1);
-            originalDoor.UpdateState(isOpen: true, isLocked: false, isArmed: true);
+            originalDoor.UpdateState(isOpen: true, isLocked: false, isAlarmed: true);
 
             _repository.UpdateDoor(originalDoor);
 
             var retrievedDoor = _repository.GetDoorById(1);
             Assert.True(retrievedDoor.IsOpen);
             Assert.False(retrievedDoor.IsLocked);
-            Assert.True(retrievedDoor.IsArmed);
+            Assert.True(retrievedDoor.IsAlarmed);
         }
     }
 }
