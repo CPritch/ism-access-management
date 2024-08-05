@@ -10,11 +10,17 @@
     @foreach (var door in doorRepository.GetAllDoors())
     {
         <MudItem xs="12" sm="6" md="4">
-            <MudCard Elevation="2">
+            <MudCard Elevation="2" Class="@(door.IsAlarmed ? "pulsating-outline" : "")">
                 <MudCardHeader>
                     <CardHeaderContent>
                         <MudText Typo="Typo.h6">@door.Name</MudText>
                     </CardHeaderContent>
+                    <CardHeaderActions>
+                        @if (door.IsAlarmed)
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Warning" Color="Color.Error" /> 
+                        }
+                    </CardHeaderActions>
                 </MudCardHeader>
                 <MudCardActions>
                     <MudButton Variant="Variant.Filled" OnClick="@(() => ToggleDoorState(door, "IsOpen", !door.IsOpen))">
@@ -87,3 +93,22 @@
         }
     }
 }
+
+ <style>
+.pulsating-outline {
+    animation: pulse 2s infinite;
+    outline: 4px solid red;
+}
+
+@@keyframes pulse {
+    0% {
+        outline-color: transparent;
+    }
+    50% {
+        outline-color: red;
+    }
+    100% {
+        outline-color: transparent;
+    }
+}
+</style>
