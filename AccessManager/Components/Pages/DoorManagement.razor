@@ -1,0 +1,132 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.SignalR;
+@using Microsoft.AspNetCore.SignalR.Client;
+@using AccessManager.Data
+@using AccessManager.Hubs;
+@rendermode InteractiveServer
+@inject NavigationManager _navigationManager
+@inject IDoorRepository _doorRepository
+@inject IHubContext<DoorStatusHub> _hubContext
+
+<PageTitle>Door Management</PageTitle>
+
+<MudText Typo="Typo.h3" Class="pb-4">Door Management</MudText>
+<MudGrid>
+    @foreach (var door in _doorRepository.GetAllDoors())
+    {
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Elevation="2" Class="@(door.IsAlarmed ? "pulsating-outline" : "")">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">@door.Name</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        @if (door.IsAlarmed)
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Warning" Color="Color.Error" /> 
+                        }
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Filled" OnClick="@(() => ToggleOpen(door))">
+                        @(door.IsOpen ? "Close" : "Open")
+                    </MudButton>
+                    <MudButton Variant="Variant.Filled" OnClick="@(() => ToggleLocked(door))">
+                        @(door.IsLocked ? "Unlock" : "Lock")
+                    </MudButton>
+                    <MudButton Variant="Variant.Filled" OnClick="@(() => ToggleAlarm(door))">
+                        @(door.IsAlarmed ? "Disarm" : "Arm")
+                    </MudButton>
+                </MudCardActions>
+                <MudCardContent>
+                    <MudText>Status:</MudText>
+                    <MudChip T="string" Color="@GetOpenColor(door.IsOpen)" Icon="@GetOpenIcon(door.IsOpen)">
+                        @GetOpenText(door.IsOpen)
+                    </MudChip>
+                    <MudChip T="string" Color="@GetLockedColor(door.IsLocked)" Icon="@GetLockedIcon(door.IsLocked)">
+                        @GetLockedText(door.IsLocked)
+                    </MudChip>
+                    <MudChip T="string" Color="@GetAlarmedColor(door.IsAlarmed)" Icon="@GetAlarmedIcon(door.IsAlarmed)">
+                        @GetAlarmedText(door.IsAlarmed)
+                    </MudChip>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+    private string GetOpenText(bool isOpen) => isOpen ? "Open" : "Closed";
+    private Color GetOpenColor(bool isOpen) => isOpen ? Color.Success : Color.Warning;
+    private string GetOpenIcon(bool isOpen) => isOpen ? Icons.Material.Outlined.DoorFront : Icons.Material.Filled.DoorFront;
+
+    private string GetLockedText(bool isLocked) => isLocked ? "Locked" : "Unlocked";
+    private Color GetLockedColor(bool isLocked) => isLocked ? Color.Warning : Color.Success;
+    private string GetLockedIcon(bool isLocked) => isLocked ? Icons.Material.Filled.Lock : Icons.Material.Filled.LockOpen;
+
+    private string GetAlarmedText(bool isAlarmed) => isAlarmed ? "Alarmed" : "Inactive";
+    private Color GetAlarmedColor(bool isAlarmed) => isAlarmed ? Color.Error : Color.Success;
+    private string GetAlarmedIcon(bool isAlarmed) => isAlarmed ? Icons.Material.Filled.AlarmOn : Icons.Material.Filled.AlarmOff;
+}
+
+@code {
+    private HubConnection? _hubConnection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(_navigationManager.ToAbsoluteUri("/doorStatusHub"))
+
+            .Build();
+
+        _hubConnection.On<Door>("DoorStateChanged", async (updatedDoor) =>
+        {
+            await InvokeAsync(StateHasChanged);
+        });
+
+        await _hubConnection.StartAsync();
+    }
+
+    private async Task ToggleOpen(Door door)
+    {
+        if (_hubConnection is null) { return; }
+        await _hubConnection.SendAsync("UpdateDoorState", door.Id, !door.IsOpen, door.IsLocked, door.IsAlarmed);
+    }
+
+    private async Task ToggleLocked(Door door)
+    {
+        if (_hubConnection is null) { return; }
+        await _hubConnection.SendAsync("UpdateDoorState", door.Id, door.IsOpen, !door.IsLocked, door.IsAlarmed);
+    }
+
+    private async Task ToggleAlarm(Door door)
+    {
+        if (_hubConnection is null) { return; }
+        await _hubConnection.SendAsync("UpdateDoorState", door.Id, door.IsOpen, door.IsLocked, !door.IsAlarmed);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_hubConnection is null) { return; }
+        await _hubConnection.DisposeAsync();
+    }
+}
+
+ <style>
+.pulsating-outline {
+    animation: pulse 2s infinite;
+    outline: 4px solid red;
+}
+
+@@keyframes pulse {
+    0% {
+        outline-color: transparent;
+    }
+    50% {
+        outline-color: red;
+    }
+    100% {
+        outline-color: transparent;
+    }
+}
+</style>
