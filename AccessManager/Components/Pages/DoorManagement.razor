@@ -1,13 +1,18 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.SignalR;
+@using Microsoft.AspNetCore.SignalR.Client;
 @using AccessManager.Data
+@using AccessManager.Hubs;
 @rendermode InteractiveServer
-@inject IDoorRepository doorRepository
+@inject NavigationManager _navigationManager
+@inject IDoorRepository _doorRepository
+@inject IHubContext<DoorStatusHub> _hubContext
 
 <PageTitle>Door Management</PageTitle>
 
 <MudText Typo="Typo.h3" Class="pb-4">Door Management</MudText>
 <MudGrid>
-    @foreach (var door in doorRepository.GetAllDoors())
+    @foreach (var door in _doorRepository.GetAllDoors())
     {
         <MudItem xs="12" sm="6" md="4">
             <MudCard Elevation="2" Class="@(door.IsAlarmed ? "pulsating-outline" : "")">
@@ -23,13 +28,13 @@
                     </CardHeaderActions>
                 </MudCardHeader>
                 <MudCardActions>
-                    <MudButton Variant="Variant.Filled" OnClick="@(() => ToggleDoorState(door, "IsOpen", !door.IsOpen))">
+                    <MudButton Variant="Variant.Filled" OnClick="@(() => ToggleOpen(door))">
                         @(door.IsOpen ? "Close" : "Open")
                     </MudButton>
-                    <MudButton Variant="Variant.Filled" OnClick="@(() => ToggleDoorState(door, "IsLocked", !door.IsLocked))">
+                    <MudButton Variant="Variant.Filled" OnClick="@(() => ToggleLocked(door))">
                         @(door.IsLocked ? "Unlock" : "Lock")
                     </MudButton>
-                    <MudButton Variant="Variant.Filled" OnClick="@(() => ToggleDoorState(door, "IsAlarmed", !door.IsAlarmed))">
+                    <MudButton Variant="Variant.Filled" OnClick="@(() => ToggleAlarm(door))">
                         @(door.IsAlarmed ? "Disarm" : "Arm")
                     </MudButton>
                 </MudCardActions>
@@ -65,32 +70,45 @@
 }
 
 @code {
-    @inject IDoorRepository _doorRepository;
-    @inject NavigationManager _navigationManager;
+    private HubConnection? _hubConnection;
 
-    private void ToggleDoorState(Door door, string propertyName, bool newValue)
+    protected override async Task OnInitializedAsync()
     {
-        switch (propertyName)
-        {
-            case "IsOpen":
-                door.UpdateState(newValue, door.IsLocked, door.IsAlarmed);
-                break;
-            case "IsLocked":
-                door.UpdateState(door.IsOpen, newValue, door.IsAlarmed);
-                break;
-            case "IsAlarmed":
-                door.UpdateState(door.IsOpen, door.IsLocked, newValue);
-                break;
-        }
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(_navigationManager.ToAbsoluteUri("/doorStatusHub"))
 
-        try
+            .Build();
+
+        _hubConnection.On<Door>("DoorStateChanged", async (updatedDoor) =>
         {
-            _doorRepository.UpdateDoor(door);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error updating door: {ex.Message}"); //Should surface actual error here
-        }
+            await InvokeAsync(StateHasChanged);
+        });
+
+        await _hubConnection.StartAsync();
+    }
+
+    private async Task ToggleOpen(Door door)
+    {
+        if (_hubConnection is null) { return; }
+        await _hubConnection.SendAsync("UpdateDoorState", door.Id, !door.IsOpen, door.IsLocked, door.IsAlarmed);
+    }
+
+    private async Task ToggleLocked(Door door)
+    {
+        if (_hubConnection is null) { return; }
+        await _hubConnection.SendAsync("UpdateDoorState", door.Id, door.IsOpen, !door.IsLocked, door.IsAlarmed);
+    }
+
+    private async Task ToggleAlarm(Door door)
+    {
+        if (_hubConnection is null) { return; }
+        await _hubConnection.SendAsync("UpdateDoorState", door.Id, door.IsOpen, door.IsLocked, !door.IsAlarmed);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_hubConnection is null) { return; }
+        await _hubConnection.DisposeAsync();
     }
 }
 
