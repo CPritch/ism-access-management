@@ -28,6 +28,8 @@ This document outlines the key design choices made during the development of the
 
 ## Future Considerations
 
+- **CI/CD**: Set up a CI/CD pipeline to automate the build, testing, and deployment process, ensuring code quality and facilitating faster, more reliable releases.
+- **Docker**: I'll have to put my hands up here, there was a dockerfile but I ended up fighting a referencing issue and I didn't come back to it in time.
 - **State Change Validation:**  Implement more robust validation logic within the `Door` entity or a separate service layer to prevent invalid state transitions (e.g., preventing a door from being locked while open).
 - **Database Integration:**  Replace the in-memory storage with a database for persistent data storage and to handle potential concurrency issues.
 - **Authentication and Authorization:** Add user authentication and authorization mechanisms to control access and restrict actions based on user roles.
