@@ -35,9 +35,9 @@ This document outlines the key design choices made during the development of the
 - **Locking Mechanism:** Implement a robust locking mechanism (potentially using a distributed lock or database transactions) to handle concurrent door state updates and ensure data consistency.
 - **Async Simulation:** Introduce artificial delays in door state updates to simulate real-world scenarios where actions might take some time to complete.
 - **Microservices Architecture:**  Explore the possibility of refactoring the application into a microservices architecture, especially if the optional requirement of accessing data via an API is pursued. This would involve creating separate services for the frontend, backend API, and potentially other functionalities.
-- **Graceful Error Handling:**  Enhance error handling, particularly around SignalR connection issues, to provide more informative feedback to the user and prevent application crashes.
-- **Structured Logging:**  Implement structured logging using a framework like Serilog or NLog to capture detailed information about application events, errors, and warnings in a machine-readable format, facilitating easier troubleshooting and analysis.
+- **Graceful Error Handling:**  Enhance error handling, particularly around SignalR connection issues, to provide more informative feedback to the user and prevent application crashes. The error handling leaves much to be desired.
+- **Structured Logging:**  Implement structured logging using a framework like Serilog or NLog to capture detailed information about application events, errors, and warnings in a machine-readable format, facilitating easier troubleshooting and analysis. Again, logging here is insufficient for my liking.
 - **Door State History:**  Implement a data structure for DoorState allowing for us to record a history of state changes for a door.
 - **Comprehensive Testing:**  Expand the test suite to include bUnit tests for Razor components and add more coverage for existing xUnit tests to ensure the application's correctness and robustness. 
 
-There's plenty of additional features I could expound on; I think focusing on what I think's missing right now for being up to my standards instead of a bunch of interesting new features.
+There's plenty of additional features I could expound on; I think it's best focusing on what I believe's missing right now instead of a bunch of interesting new features.
