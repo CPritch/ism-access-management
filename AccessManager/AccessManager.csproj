@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.7" />
     <PackageReference Include="MudBlazor" Version="7.5.0" />
+     <InternalsVisibleTo Include="AccessManager.Tests" />
   </ItemGroup>
 
 </Project>
