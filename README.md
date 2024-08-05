@@ -41,7 +41,7 @@ A web-based UI built using C# / ASP.NET Core and MudBlazor for managing access c
 ## Testing
 
 - The project includes unit tests using xUnit.
-- To run the tests, execute the following command in the project's root directory:
+- To run the tests, execute the following command in the `AccessManager` directory:
 
     ```bash
     dotnet test
