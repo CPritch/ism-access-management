@@ -38,3 +38,15 @@ A web-based UI built using C# / ASP.NET Core and MudBlazor for managing access c
     - The application should now be running at `https://localhost:7198`. 
     - Open multiple browser windows or tabs to see the real-time updates in action.
 
+## Testing
+
+- The project includes unit tests using xUnit.
+- To run the tests, execute the following command in the project's root directory:
+
+    ```bash
+    dotnet test
+    ```
+
+## License
+
+This project is licensed under the [MIT License](/LICENSE).
