@@ -15,3 +15,26 @@ A web-based UI built using C# / ASP.NET Core and MudBlazor for managing access c
 ### Prerequisites
 
 - .NET 8 SDK or later
+
+### Installation & Running
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/CPritch/ism-access-management
+    ```
+2.  **Navigate to the project directory:**
+    ```bash
+    cd ism-access-management/AccessManager
+    ```
+3.  **Restore NuGet packages:**
+    ```bash
+    dotnet restore
+    ```
+4.  **Run the application:**
+    ```bash
+    dotnet run
+    ```
+5.  **Open in browser:**
+    - The application should now be running at `https://localhost:7198`. 
+    - Open multiple browser windows or tabs to see the real-time updates in action.
+
