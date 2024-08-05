@@ -65,9 +65,6 @@
 }
 
 @code {
-    @inject IDoorRepository _doorRepository;
-    @inject NavigationManager _navigationManager;
-
     private void ToggleOpen(Door door)
     {
         door.UpdateState(!door.IsOpen, door.IsLocked, door.IsAlarmed);
@@ -90,7 +87,7 @@
     {
         try
         {
-            _doorRepository.UpdateDoor(door);
+            doorRepository.UpdateDoor(door);
         }
         catch (Exception ex)
         {
