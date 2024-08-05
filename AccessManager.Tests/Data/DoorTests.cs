@@ -26,5 +26,38 @@ namespace AccessManager.Tests.Data
             Assert.True(door.IsLocked);
             Assert.True(door.IsAlarmed);
         }
+
+        [Fact]
+        public void Constructor_ThrowsArgumentException_ForInvalidId()
+        {
+            Assert.Throws<ArgumentException>(() => new Door(0, "Test Door"));
+        }
+
+        [Fact]
+        public void Constructor_ThrowsArgumentException_ForEmptyName()
+        {
+            Assert.Throws<ArgumentException>(() => new Door(1, ""));
+        }
+
+        [Fact]
+        public void Constructor_ThrowsArgumentException_ForTooLongName()
+        {
+            var longName = new string('a', 51);
+            Assert.Throws<ArgumentException>(() => new Door(1, longName));
+        }
+
+        [Theory]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, true)]
+        public void UpdateState_UpdatesPropertiesCorrectly_MultipleScenarios(bool isOpen, bool isLocked, bool isAlarmed)
+        {
+            var door = new Door(1, "Test Door");
+            door.UpdateState(isOpen, isLocked, isAlarmed);
+
+            Assert.Equal(isOpen, door.IsOpen);
+            Assert.Equal(isLocked, door.IsLocked);
+            Assert.Equal(isAlarmed, door.IsAlarmed);
+        }
     }
 }
