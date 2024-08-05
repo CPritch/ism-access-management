@@ -13,18 +13,18 @@ namespace AccessManager.Tests.Data
             Assert.Equal("Test Door", door.Name);
             Assert.False(door.IsOpen);
             Assert.False(door.IsLocked);
-            Assert.False(door.IsArmed);
+            Assert.False(door.IsAlarmed);
         }
 
         [Fact]
         public void UpdateState_UpdatesPropertiesCorrectly()
         {
             var door = new Door(id: 1, name: "Test Door");
-            door.UpdateState(isOpen: true, isLocked: true, isArmed: true);
+            door.UpdateState(isOpen: true, isLocked: true, isAlarmed: true);
 
             Assert.True(door.IsOpen);
             Assert.True(door.IsLocked);
-            Assert.True(door.IsArmed);
+            Assert.True(door.IsAlarmed);
         }
     }
 }

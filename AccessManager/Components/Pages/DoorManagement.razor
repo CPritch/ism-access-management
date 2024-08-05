@@ -23,8 +23,8 @@
                     <MudChip T="string" Color="@GetLockedColor(door.IsLocked)" Icon="@GetLockedIcon(door.IsLocked)">
                         @GetLockedText(door.IsLocked)
                     </MudChip>
-                    <MudChip T="string" Color="@GetArmedColor(door.IsArmed)" Icon="@GetArmedIcon(door.IsArmed)">
-                        @GetArmedText(door.IsArmed)
+                    <MudChip T="string" Color="@GetAlarmedColor(door.IsAlarmed)" Icon="@GetAlarmedIcon(door.IsAlarmed)">
+                        @GetAlarmedText(door.IsAlarmed)
                     </MudChip>
                 </MudCardContent>
             </MudCard>
@@ -34,14 +34,14 @@
 
 @code {
     private string GetOpenText(bool isOpen) => isOpen ? "Open" : "Closed";
-    private Color GetOpenColor(bool isOpen) => isOpen ? Color.Success : Color.Error;
+    private Color GetOpenColor(bool isOpen) => isOpen ? Color.Success : Color.Warning;
     private string GetOpenIcon(bool isOpen) => isOpen ? Icons.Material.Outlined.DoorFront : Icons.Material.Filled.DoorFront;
 
     private string GetLockedText(bool isLocked) => isLocked ? "Locked" : "Unlocked";
     private Color GetLockedColor(bool isLocked) => isLocked ? Color.Warning : Color.Success;
     private string GetLockedIcon(bool isLocked) => isLocked ? Icons.Material.Filled.Lock : Icons.Material.Filled.LockOpen;
 
-    private string GetArmedText(bool isArmed) => isArmed ? "Armed" : "Disarmed";
-    private Color GetArmedColor(bool isArmed) => isArmed ? Color.Warning : Color.Success;
-    private string GetArmedIcon(bool isArmed) => isArmed ? Icons.Material.Filled.AlarmOn : Icons.Material.Filled.AlarmOff;
+    private string GetAlarmedText(bool isAlarmed) => isAlarmed ? "Alarmed" : "Inactive";
+    private Color GetAlarmedColor(bool isAlarmed) => isAlarmed ? Color.Error : Color.Success;
+    private string GetAlarmedIcon(bool isAlarmed) => isAlarmed ? Icons.Material.Filled.AlarmOn : Icons.Material.Filled.AlarmOff;
 }
