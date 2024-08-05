@@ -30,7 +30,7 @@ namespace AccessManager.Tests.Data
         [Fact]
         public void Constructor_ThrowsArgumentException_ForInvalidId()
         {
-            Assert.Throws<ArgumentException>(() => new Door(0, "Test Door"));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Door(0, "Test Door"));
         }
 
         [Fact]
