@@ -1,5 +1,6 @@
 using AccessManager.Components;
 using AccessManager.Data;
+using AccessManager.Hubs;
 using MudBlazor.Services;
 
 namespace AccessManager
@@ -14,6 +15,7 @@ namespace AccessManager
                 .AddInteractiveServerComponents();
             builder.Services.AddMudServices();
             builder.Services.AddSingleton<IDoorRepository, DoorRepository>();
+            builder.Services.AddSignalR();
 
             var app = builder.Build();
 
@@ -30,6 +32,8 @@ namespace AccessManager
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
+
+            app.MapHub<DoorStatusHub>("/doorStatusHub");
 
             app.Run();
         }

@@ -1,13 +1,18 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.SignalR;
+@using Microsoft.AspNetCore.SignalR.Client;
 @using AccessManager.Data
+@using AccessManager.Hubs;
 @rendermode InteractiveServer
-@inject IDoorRepository doorRepository
+@inject NavigationManager _navigationManager
+@inject IDoorRepository _doorRepository
+@inject IHubContext<DoorStatusHub> _hubContext
 
 <PageTitle>Door Management</PageTitle>
 
 <MudText Typo="Typo.h3" Class="pb-4">Door Management</MudText>
 <MudGrid>
-    @foreach (var door in doorRepository.GetAllDoors())
+    @foreach (var door in _doorRepository.GetAllDoors())
     {
         <MudItem xs="12" sm="6" md="4">
             <MudCard Elevation="2" Class="@(door.IsAlarmed ? "pulsating-outline" : "")">
@@ -65,34 +70,45 @@
 }
 
 @code {
-    private void ToggleOpen(Door door)
-    {
-        door.UpdateState(!door.IsOpen, door.IsLocked, door.IsAlarmed);
-        UpdateDoor(door);
-    }
+    private HubConnection? _hubConnection;
 
-    private void ToggleLocked(Door door)
+    protected override async Task OnInitializedAsync()
     {
-        door.UpdateState(door.IsOpen, !door.IsLocked, door.IsAlarmed);
-        UpdateDoor(door);
-    }
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(_navigationManager.ToAbsoluteUri("/doorStatusHub"))
 
-    private void ToggleAlarm(Door door)
-    {
-        door.UpdateState(door.IsOpen, door.IsLocked, !door.IsAlarmed);
-        UpdateDoor(door);
-    }
+            .Build();
 
-    private void UpdateDoor(Door door)
-    {
-        try
+        _hubConnection.On<Door>("DoorStateChanged", async (updatedDoor) =>
         {
-            doorRepository.UpdateDoor(door);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error updating door: {ex.Message}"); //Should surface actual error here
-        }
+            await InvokeAsync(StateHasChanged);
+        });
+
+        await _hubConnection.StartAsync();
+    }
+
+    private async Task ToggleOpen(Door door)
+    {
+        if (_hubConnection is null) { return; }
+        await _hubConnection.SendAsync("UpdateDoorState", door.Id, !door.IsOpen, door.IsLocked, door.IsAlarmed);
+    }
+
+    private async Task ToggleLocked(Door door)
+    {
+        if (_hubConnection is null) { return; }
+        await _hubConnection.SendAsync("UpdateDoorState", door.Id, door.IsOpen, !door.IsLocked, door.IsAlarmed);
+    }
+
+    private async Task ToggleAlarm(Door door)
+    {
+        if (_hubConnection is null) { return; }
+        await _hubConnection.SendAsync("UpdateDoorState", door.Id, door.IsOpen, door.IsLocked, !door.IsAlarmed);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_hubConnection is null) { return; }
+        await _hubConnection.DisposeAsync();
     }
 }
 
